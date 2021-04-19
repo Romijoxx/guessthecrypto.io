@@ -1,0 +1,8 @@
+.header{
+    border-bottom: 1px solid transparent;
+    -o-border-image: linear-gradient(0.25turn, rgba(156, 224, 255, 0) 10%, rgba(59, 173, 227, 0.5) 20%, #576fe6 40%, #9844b7 60%, rgba(255, 53, 127, 0.5) 80%, rgba(255, 53, 127, 0) 100%);
+       border-image: -webkit-gradient(linear, left top, right top, color-stop(10%, rgba(156, 224, 255, 0)), color-stop(20%, rgba(59, 173, 227, 0.5)), color-stop(40%, #576fe6), color-stop(60%, #9844b7), color-stop(80%, rgba(255, 53, 127, 0.5)), to(rgba(255, 53, 127, 0)));
+       border-image: linear-gradient(0.25turn, rgba(156, 224, 255, 0) 10%, rgba(59, 173, 227, 0.5) 20%, #576fe6 40%, #9844b7 60%, rgba(255, 53, 127, 0.5) 80%, rgba(255, 53, 127, 0) 100%);
+    border-image-slice: 0.5;
+
+}

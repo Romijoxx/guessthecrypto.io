@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="./static/Style/style.css">
+	<link rel="stylesheet" type="text/css" href="./static/Style/grid.css">
+	<link rel="stylesheet" type="text/css" href="./static/Style/input.css">
+	<link rel="stylesheet" type="text/css" href="./static/Style/button.css">
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Arvo" />
+	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+		integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+		crossorigin="anonymous"></script>
+
+	<script src="./static/script.js" defer></script>
+
+	<title>GuessTheCrypto.io</title>
+
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body class="h-screen">
+	<!-- INTRO CONATAINER-->
+	<div style="display:none" id="intro" class="conatainer pt-20">
+
+			<div class="flex flex-col justify-center items-center" >
+				<div>
+					<h2 class="text-7xl"> Game </h2>
+				</div>
+
+				<form class="pt-4 w-1/4 shadow-md" id="form_user">
+					<div class="rounded bg-purple-600 h-32 w-full p-4">
+						<h2 class="text-xl font-bold">Enter a name to join a game!</h2>
+						<div class="pt-2 rounded-2xl">
+							<input type="text" id="name"
+								class="d-block w-full border border-blue-200 shadow pl-2 text-center text-gray-800"
+								placeholder="Name">
+						</div>
+					</div>
+				</form>
+			</div>
+
+	</div>
+
+	<!--LIST CONTAINER-->
+
+	<div class="container grid-cols max-w-screen-md mx-auto" id="createGame" style="display:none">
+			<div class="" >
+				<div>
+					<h2 class="text-7xl"> Guess the Crypto! </h2>
+				</div>
+				<br>
+				<div class="pb-10 border-1">
+					<div style="float: right"><button class="button" id="btnCreate2" style="float: right">Create New
+							Game
+						</button> </div>
+
+					<div style="float: left" class="text-gray-800" id="buttonNotMoving"><input type="text" id="gamecode"
+							placeholder="Game code">
+
+					</div>
+				</div>
+				<br>
+
+				<div>
+					<div class="grid gap-4 grid-cols-3">
+
+						<div class="table-cell">
+							<h2>Players</h2>
+						</div>
+						<div class="table-cell">
+							<h2>State</h2>
+						</div>
+						<div class="table-cell">
+							<h2>Joinable</h2>
+						</div>
+
+
+
+						<div class="table-cell tablein">4/5</div>
+						<div class="table-cell tablein">Running...</div>
+						<div class="table-cell tablein">Closed</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	<!--CREATE GAME CONTAINER-->
+
+	<div class="p-20 flex flex-col items-center" id="createGame" style="">
+
+		<form style="" class="rounded p-5 text-center " id="form_game">
+			<h2 class="text-7xl">
+
+				Game Settings
+
+			</h2>
+
+			<div class="pt-2 rounded-2xl h-10 pt-10">
+				<div>
+					<h3 class="text-xl font-bold">Player count: <span id="playerCountoutput" class="slideoutput"></span>
+					</h3>
+				</div>
+
+				<input required name="playerCount" type="range" id="playerCount"
+					class="w-full h-full shadow text-center custom-range" min="1" max="10" value="4" step="1">
+
+				<script>
+					var playerCount = document.getElementById("playerCount");
+					var playerCountoutput = document.getElementById("playerCountoutput");
+					playerCountoutput.innerHTML = playerCount.value;
+					playerCount.oninput = function () {
+						playerCountoutput.innerHTML = playerCount.value;
+					}
+				</script>
+			</div>
+
+			<div class="pt-2 rounded-2xl h-10 pt-16">
+				<div>
+					<h3 class="text-xl font-bold">Lobby is: <span id="lobbyoutput" name="lobbyoutput"
+							class="slideoutput"></span></h3>
+				</div>
+
+				<input required name="lobby" type="range" id="lobby"
+					class="w-full h-full shadow text-center custom-range" min="0" max="1" value="0" step="1">
+
+				<script>
+					var lobby = document.getElementById("lobby");
+					var lobbyoutput = document.getElementById("lobbyoutput");
+					lobbyoutput.innerHTML = " closed";
+					lobby.oninput = function () {
+
+						console.log(lobby.value)
+	
+						if(lobby.value === '1' ){
+							lobbyoutput.innerHTML = "open";
+						}
+						else {
+							lobbyoutput.innerHTML = "closed";
+						}
+						
+
+					}
+				</script>
+
+
+			</div>
+
+			<div class="pt-2 rounded-2xl h-10 pt-16">
+				<div>
+					<h3 class="text-xl font-bold">Difficulty: <span id="difficultyoutput" name="difficultyoutput"
+							class="slideoutput"></span></h3>
+				</div>
+
+				<input required name="difficulty" type="range" id="difficulty"
+					class="w-full h-full shadow text-center custom-range" min="0" max="1" value="0" step="1">
+
+				<script>
+					var difficulty = document.getElementById("difficulty");
+					var difficultyoutput = document.getElementById("difficultyoutput");
+					difficultyoutput.innerHTML = " easy";
+					difficulty.oninput = function () {
+
+						console.log(difficulty.value)
+						
+						if(difficulty.value === '1' ){
+							difficultyoutput.innerHTML = "hard";
+						}
+						else {
+							difficultyoutput.innerHTML = "easy";
+						}
+
+					}
+				</script>
+
+
+				<div class="pt-20 rounded-2xl font-bold text-3xl">
+					<button class="button" id="btnCreate">
+						Create game
+					</button>
+				</div>
+			</div>
+			
+			<div class="pt-2 rounded-2xl h-10 pt-16">
+				<div>
+					<h3 class="text-xl font-bold">Speed in seconds: <span id="speedoutput" name="speedoutput"
+							class="slideoutput"></span></h3>
+				</div>
+
+				<input required name="speed" type="range" id="speed"
+					class="w-full h-full shadow text-center custom-range" min="5" max="30" value="15" step="1">
+
+				<script>
+					var speed = document.getElementById("speed");
+					var speedoutput = document.getElementById("speedoutput");
+					speedoutput.innerHTML = speed.value;
+					speed.oninput = function () {
+							speedoutput.innerHTML = speed.value;
+
+					}
+				</script>
+			</div>
+
+		</form>
+
+	</div>
+
+	<!--GAME CONTAINER-->
+
+	<div class="container max-w-screen-xl mx-auto" style="display:none">
+		<div class="" id="intro1">
+			<div>
+				<h2 class="text-7xl"> Guess the Crypto! </h2>
+			</div>
+			<br>
+			<!--Script that selects a coin-->
+			<div>
+				<div class="grid gap-4 grid-cols-3 items-start">
+
+					<div class="grid gap-4 grid-cols-1">
+						<div class="table-cell rounded-full">
+							<h2>Krypto</h2>
+						</div>
+
+						<!--Script that selects the Image of the coin-->
+						<div id="image" onload = "selectPicture()">
+						<!--<script>
+							var img = document.getElementById('guess');
+							var name = "BTC"
+							
+							function selectPicture(){
+								var random =(int) (Math.random*1);
+								var List = cryptoList[random];
+								img.src = './static/Pictures/' + random + '.jpg';
+								
+								document.getElementById('image').appendChild(img);
+								
+							}
+							
+						
+						</script>-->
+						<img url="./static/Pictures/BTC.jpg"  id="guess" style="width: 50%" class="over rounded-full" alt="Bitcoin Image">
+						</div>
+					</div>
+
+
+
+					<div class="grid gap-4 grid-cols-1">
+						<div class="table-cell">
+							<h2>Guess it!</h2>
+						</div>
+						<!--Script that selects the Name of the coin-->
+						<div class="over">How high ist the price of Bitcoin? </div>
+						<div class="over">
+							<div style="float: left" class="button text-gray-800"><input type="text"
+									style="text-align: center" id="guessedPrice" placeholder="Price?">
+
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="grid gap-4 grid-cols-1">
+
+						<h2>Leaderboard</h2>
+						<div class="grid gap-4 grid-cols-2">
+
+							<div class="table-cell">
+								<h2>Player</h2>
+							</div>
+							<div class="table-cell">
+								<h2>Points</h2>
+							</div>
+
+							<!--Script that sorts the leaderboard based on points-->
+							<div class="table-cell tablein">Justin</div>
+							<div class="table-cell tablein">4500</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

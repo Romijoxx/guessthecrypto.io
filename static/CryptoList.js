@@ -1,0 +1,1 @@
+const cryptoList = {BTC;ETH;ADA;XRP;NAGA}
